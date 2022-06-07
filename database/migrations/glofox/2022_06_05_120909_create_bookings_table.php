@@ -16,10 +16,13 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->string('member_name');
-            $table->dateTime('date');
-            $table->foreignId('class_id')->constrained()
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+            $table->date('date');
+            $table->unsignedBigInteger('class_id');
+            $table->foreign('class_id')
+                ->references('id')
+                ->on('classes')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
