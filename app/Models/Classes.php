@@ -19,8 +19,8 @@ class Classes extends Model
     /**
      * Get the bookings for the class.
      */
-    public function bookinngs()
+    public function bookings()
     {
-        return $this->hasMany(Book::class);
+        return $this->hasMany(Booking::class, 'class_id');
     }
 }
