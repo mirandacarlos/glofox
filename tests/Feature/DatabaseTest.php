@@ -13,6 +13,17 @@ use Tests\TestCase;
 class DatabaseTest extends TestCase
 {
     /**
+     * Start empty database
+     *
+     * @return void
+     */
+    public function test_database_migration()
+    {
+        $this->artisan('migrate:fresh --path=database/migrations/glofox')
+            ->assertSuccessful();
+    }
+
+    /**
      * Lesson can be instantiate.
      *
      * @return void
@@ -54,5 +65,27 @@ class DatabaseTest extends TestCase
     {
         $this->seed(BookingsSeeder::class);
         $this->assertCount(5, Booking::all());
+    }
+
+    /**
+     * Lesson exist.
+     *
+     * @return void
+     */
+    public function test_lesson_exist()
+    {
+        $lesson = Lesson::factory()->create();
+        $this->assertModelExists($lesson);
+    }
+
+    /**
+     * Booking exist.
+     *
+     * @return void
+     */
+    public function test_booking_exist()
+    {
+        $booking = Booking::factory()->create();
+        $this->assertModelExists($booking);
     }
 }
