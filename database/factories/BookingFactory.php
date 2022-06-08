@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Classes;
+use App\Models\Lesson;
 use DateInterval;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -19,19 +19,17 @@ class BookingFactory extends Factory
      */
     public function definition()
     {
-        $start = $this->faker->dateTimeBetween('now', '+1 month');
-        $class = Classes::where('start', '<=', $start)->where('end', '>=', $start)->first();
-        if (is_null($class)) {
-            $class = Classes::factory(1)->create([
-                'start' => $start,
-                'end' => $this->faker->dateTimeBetween($start, '+1 month')
-            ])[0];
-        }
-
+        $lesson = null;
+        $lessons = Lesson::all();
+        $lesson = $lessons->isEmpty() ?
+            Lesson::factory()->create() :
+            $lessons->random();
         return [
+            'lesson_id' => $lesson,
             'member_name' => $this->faker->name(),
-            'date' => $start,
-            'class_id' => $class->id
+            'date' => function () use ($lesson) {
+                return $this->faker->dateTimeBetween($lesson->start, $lesson->end);
+            }
         ];
     }
 }
