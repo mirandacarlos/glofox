@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LessonController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/classes', [LessonController::class, 'index']);
+Route::get('/classes/{lesson}', [LessonController::class, 'show']);
+Route::post('/classes', [LessonController::class, 'store']);
+Route::put('/classes/{lesson}', [LessonController::class, 'update']);
+Route::delete('/classes/{lesson}', [LessonController::class, 'destroy']);
