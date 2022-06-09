@@ -9,6 +9,13 @@ class Lesson extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'start', 'end', 'capacity'];
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
