@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use PDOException;
 
 class LessonController extends Controller
 {
@@ -90,7 +91,15 @@ class LessonController extends Controller
      */
     public function destroy(Lesson $lesson)
     {
-        $lesson->delete();
-        return response($lesson, 204);
+        $response = new Response();
+        try{
+            $lesson->delete();
+            $response->setStatusCode(204);
+        }
+        catch(PDOException $e){
+            $response->setStatusCode(422);
+            $response->setContent(['error' => 'the class have bookings associated']);
+        }
+        return $response;
     }
 }
