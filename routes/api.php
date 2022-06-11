@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,9 @@ Route::get('/classes/{lesson}', [LessonController::class, 'show']);
 Route::post('/classes', [LessonController::class, 'store']);
 Route::put('/classes/{lesson}', [LessonController::class, 'update']);
 Route::delete('/classes/{lesson}', [LessonController::class, 'destroy']);
+
+Route::get('/bookings', [BookingController::class, 'index']);
+Route::get('/bookings/{booking}', [BookingController::class, 'show']);
+Route::post('/bookings', [BookingController::class, 'store']);
+Route::put('/bookings/{booking}', [BookingController::class, 'update']);
+Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
