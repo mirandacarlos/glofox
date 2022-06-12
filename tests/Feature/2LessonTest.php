@@ -148,7 +148,7 @@ class LessonTest extends TestCase
     {
         $lesson = Lesson::factory()->create();
         $aux = $lesson->start->format('Y-m-d');
-        $lesson->start = $lesson->end->format('y-m-d');
+        $lesson->start = $lesson->end->format('Y-m-d');
         $lesson->end = $aux;
         $response = $this->putJson(
             '/api/classes/'.$lesson->id,
