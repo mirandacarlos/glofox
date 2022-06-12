@@ -10,9 +10,16 @@ class Booking extends Model
     use HasFactory;
 
     /**
-     * Get the class that owns the book.
+     * The attributes that are mass assignable.
+     *
+     * @var array
      */
-    public function class()
+    protected $fillable = ['member_name', 'date', 'lesson_id'];
+
+    /**
+     * Get the class that owns the booking.
+     */
+    public function lesson()
     {
         return $this->belongsTo(Lesson::class);
     }
