@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Lesson;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookingRequest extends FormRequest
@@ -23,9 +24,11 @@ class StoreBookingRequest extends FormRequest
      */
     public function rules()
     {
+        $lesson = Lesson::findOrFail($this->lesson_id);
         return [
             'member_name' => 'required|string',
-            'date' => 'required|date',
+            'date' => 'required|date|before_or_equal:'
+            .$lesson->end.'|after_or_equal:'.$lesson->start,
             'lesson_id' => 'required|integer'
         ];
     }
