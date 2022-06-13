@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
 {
@@ -49,7 +51,31 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        //
+        $response = new Response();
+        $form = new StoreBookingRequest(['lesson_id' => $booking->lesson_id]);
+        
+        if ($request->has('member_name')){
+            $booking->member_name = $request->member_name;
+        }
+        if ($request->has('date')){
+            $booking->date = $request->date;
+        }
+        if ($request->has('lesson_id')){
+            $booking->lesson_id = $request->lesson_id;
+        }
+        $validator = Validator::make(
+            $booking->attributesToArray(), 
+            $form->rules()
+        );
+        if ($validator->fails()){
+            $response->setContent(['errors' => $validator->errors()]);
+            $response->setStatusCode(422);
+        }
+        else{
+            $booking->update();
+            $response->setContent($booking);
+        }
+        return $response;
     }
 
     /**
