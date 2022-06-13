@@ -53,7 +53,6 @@ class BookingTest extends TestCase
     public function test_create_booking()
     {
         $booking = Booking::factory()->make();
-        $booking->date = $booking->date->format('Y-m-d');
         $response = $this->postJson(
             '/api/bookings',
             $booking->attributesToArray()
@@ -123,14 +122,16 @@ class BookingTest extends TestCase
             'end' => '2022-06-20'
         ]);
         $booking = Booking::factory()->make([
-            'date' => '2022-06-14'
+            'date' => '2022-06-14',
+            'lesson_id' => $lesson->id
         ]);
         $response = $this->postJson(
             '/api/bookings',
             $booking->attributesToArray()
         );
         $response->assertStatus(422)
-        ->assertJsonFragment(['date' => ['The date must be a date after or equal to '.$lesson->start.'.']]);
+        ->assertJsonFragment(['date' => 
+        ['The date must be a date after or equal to '.$lesson->start.'.']]);
     }
 
     /**
@@ -145,13 +146,52 @@ class BookingTest extends TestCase
             'end' => '2022-06-20'
         ]);
         $booking = Booking::factory()->make([
-            'date' => '2022-06-23'
+            'date' => '2022-06-23',
+            'lesson_id' => $lesson->id
         ]);
         $response = $this->postJson(
             '/api/bookings',
             $booking->attributesToArray()
         );
         $response->assertStatus(422)
-        ->assertJsonFragment(['date' => ['The date must be a date before or equal to '.$lesson->end.'.']]);
+        ->assertJsonFragment(['date' => 
+        ['The date must be a date before or equal to '.$lesson->end.'.']]);
     }
+
+    /**
+     * Update booking.
+     *
+     * @return void
+     */
+    public function test_update_booking()
+    {
+        $booking = Booking::factory()->create();
+        $booking->member_name = 'test member';
+        $response = $this->putJson(
+            '/api/bookings/'.$booking->id,
+            $booking->attributesToArray()
+        );
+        $response->assertStatus(200)
+        ->assertJsonFragment(['member_name' => 'test member']);
+    }
+
+    /**
+     * Update invalid class.
+     *
+     * @return void
+     */
+    public function test_update_invalid_class()
+    {
+        $booking = Booking::factory()->create();
+        $booking->lesson_id = 26;
+        $response = $this->putJson(
+            '/api/bookings/'.$booking->id,
+            $booking->attributesToArray()
+        );
+        $response->assertStatus(422)
+        ->assertJsonFragment(["lesson_id"=> 
+        ["The selected lesson id is invalid."]]);
+    }
+
+    
 }
