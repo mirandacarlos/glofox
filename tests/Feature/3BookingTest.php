@@ -193,5 +193,26 @@ class BookingTest extends TestCase
         ["The selected lesson id is invalid."]]);
     }
 
-    
+    /**
+     * Delete booking.
+     *
+     * @return void
+     */
+    public function test_delete_booking()
+    {
+        $booking = Booking::factory()->create();
+        $response = $this->deleteJson('/api/bookings/'.$booking->id);
+        $response->assertStatus(204);
+    }
+
+    /**
+     * Delete invalid booking.
+     *
+     * @return void
+     */
+    public function test_delete_invalid_booking()
+    {
+        $response = $this->deleteJson('/api/bookings/57');
+        $response->assertStatus(404);
+    }
 }
