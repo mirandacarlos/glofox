@@ -29,7 +29,7 @@ class StoreBookingRequest extends FormRequest
             'member_name' => 'required|string',
             'date' => 'required|date|before_or_equal:'
             .$lesson->end.'|after_or_equal:'.$lesson->start,
-            'lesson_id' => 'required|integer'
+            'lesson_id' => 'required|integer|exists:lessons,id'
         ];
     }
 }
