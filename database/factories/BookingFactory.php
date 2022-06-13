@@ -28,7 +28,9 @@ class BookingFactory extends Factory
             'lesson_id' => $lesson,
             'member_name' => $this->faker->name(),
             'date' => function () use ($lesson) {
-                return $this->faker->dateTimeBetween($lesson->start, $lesson->end);
+                return $this->faker
+                ->dateTimeBetween($lesson->start, $lesson->end)
+                ->format('Y-m-d');
             }
         ];
     }
